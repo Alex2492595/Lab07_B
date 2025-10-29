@@ -52,6 +52,8 @@ public class Lab07_B extends Application {
         Label lblImage = new Label();
         
         animationBtn = new Button("Pause");
+        Button speedUpBtn = new Button("Speed+");
+        Button speedDownBtn = new Button("Speed-");
         
         Image[] imgs = new Image[20];
         
@@ -60,6 +62,8 @@ public class Lab07_B extends Application {
             Image img = new Image(path);
             imgs[i - 101] = img;
         }
+        
+        lblImage.setGraphic(new ImageView(imgs[0]));
         
         cycleImage = new SequentialTransition();
         
@@ -82,13 +86,21 @@ public class Lab07_B extends Application {
             changeAnimation();
         });
         
+        speedUpBtn.setOnAction(e -> {
+            cycleImage.setRate(cycleImage.getCurrentRate() * 1.25);
+        });
+        
+        speedDownBtn.setOnAction(e -> {
+            cycleImage.setRate(cycleImage.getCurrentRate() * 0.75);
+        });
+        
         imageBox.getChildren().addAll(lblImage);
-        buttonsBox.getChildren().addAll(animationBtn);
+        buttonsBox.getChildren().addAll(animationBtn, speedUpBtn, speedDownBtn);
         
         root.setBottom(buttonsBox);
         root.setCenter(imageBox);
         
-        Scene scene = new Scene(root, 400, 500);
+        Scene scene = new Scene(root, 350, 450);
         
         primaryStage.setTitle("Java Games");
         primaryStage.setScene(scene);
