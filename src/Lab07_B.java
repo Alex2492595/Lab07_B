@@ -9,12 +9,15 @@ import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.SequentialTransition;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.image.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
 /**
@@ -24,6 +27,9 @@ import javafx.util.Duration;
  * 29/10/2025
  */
 public class Lab07_B extends Application {
+    private boolean status = false;
+    private Button animationBtn;
+    private SequentialTransition cycleImage;
 
     /**
      * @param args the command line arguments
@@ -35,8 +41,17 @@ public class Lab07_B extends Application {
     @Override
     public void start(Stage primaryStage) {
         BorderPane root = new BorderPane();
-        StackPane middle = new StackPane();
+        root.setPadding(new Insets(0, 0, 40, 0));
+        
+        HBox imageBox = new HBox(30);
+        imageBox.setAlignment(Pos.CENTER);
+        
+        HBox buttonsBox = new HBox(30);
+        buttonsBox.setAlignment(Pos.BOTTOM_CENTER);
+        
         Label lblImage = new Label();
+        
+        animationBtn = new Button("Pause");
         
         Image[] imgs = new Image[20];
         
@@ -46,7 +61,7 @@ public class Lab07_B extends Application {
             imgs[i - 101] = img;
         }
         
-        SequentialTransition cycleImage = new SequentialTransition();
+        cycleImage = new SequentialTransition();
         
         for (int i = 0; i < imgs.length; i++) {
             int nextIdx = (i++) % imgs.length;
@@ -63,14 +78,32 @@ public class Lab07_B extends Application {
         cycleImage.setCycleCount(Animation.INDEFINITE);
         cycleImage.play();
         
-        middle.getChildren().add(lblImage);
+        animationBtn.setOnAction(e -> {
+            changeAnimation();
+        });
         
-        root.setCenter(middle);
+        imageBox.getChildren().addAll(lblImage);
+        buttonsBox.getChildren().addAll(animationBtn);
         
-        Scene scene = new Scene(root, 250, 300);
+        root.setBottom(buttonsBox);
+        root.setCenter(imageBox);
+        
+        Scene scene = new Scene(root, 400, 500);
         
         primaryStage.setTitle("Java Games");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+    
+    public void changeAnimation() {
+        if (status == false) {
+            animationBtn.setText("Play");
+            cycleImage.pause();
+            status = true;
+        } else {
+            animationBtn.setText("Pause");
+            cycleImage.play();
+            status = false;
+        }
     }
 }
